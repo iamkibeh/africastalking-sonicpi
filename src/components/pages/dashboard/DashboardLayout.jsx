@@ -24,7 +24,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import React, { useEffect } from 'react'
 import { Logout } from '@mui/icons-material'
 
@@ -98,6 +98,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const DashboardLayout = () => {
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
+  const navigate = useNavigate()
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -121,6 +122,11 @@ const DashboardLayout = () => {
       window.removeEventListener('resize', handleResize)
     }
   }, [isMobile])
+
+  const navigateHome = () => {
+    navigate('/')
+  }
+
   return (
     <div>
       <Box sx={{ display: 'flex' }}>
@@ -139,11 +145,27 @@ const DashboardLayout = () => {
             >
               <MenuIcon />
             </IconButton>
+            <Typography
+              variant='h6'
+              noWrap
+              onClick={navigateHome}
+              sx={{
+                ...(open && { display: 'none' }),
+                cursor: 'pointer',
+              }}
+            >
+              Beat<span className='text-purple-500'>Sell</span>
+            </Typography>
           </Toolbar>
         </AppBar>
         <Drawer variant='permanent' open={open}>
           <DrawerHeader>
-            <Typography variant='h6' noWrap>
+            <Typography
+              variant='h6'
+              noWrap
+              onClick={navigateHome}
+              className='cursor-pointer'
+            >
               Beat<span className='text-purple-500'>Sell</span>
             </Typography>
             <IconButton onClick={handleDrawerClose}>

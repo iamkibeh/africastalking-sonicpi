@@ -1,8 +1,12 @@
+import { Box } from '@mui/material'
+import Products from './products/Products'
+
 const DashboardHomePage = () => {
   return (
-    <div>
-      <h1>DashboardHomePage</h1>
-    </div>
+    <Box>
+      <h1 className='font-semibold text-2xl mb-2'>Beats</h1>
+      <Products />
+    </Box>
   )
 }
 

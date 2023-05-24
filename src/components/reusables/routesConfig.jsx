@@ -5,8 +5,9 @@ import DashboardLayout from '../pages/dashboard/DashboardLayout'
 import DashboardHomePage from '../pages/dashboard'
 import Layout from '../UI/Layout'
 import Login from '../pages/Login'
-import Products from '../pages/dashboard/Products'
+import Products from '../pages/dashboard/products/Products'
 import DashboardSettings from '../pages/dashboard/Settings'
+import Product from '../pages/dashboard/products/Product'
 
 export const routesConfig = [
   {
@@ -34,7 +35,14 @@ export const routesConfig = [
         path: '',
         element: <DashboardHomePage />,
       },
-      { path: 'products', element: <Products /> },
+      {
+        path: 'products',
+        element: <Products />,
+      },
+      {
+        path: 'products/:id',
+        element: <Product />,
+      },
       { path: 'settings', element: <DashboardSettings /> },
     ],
   },
