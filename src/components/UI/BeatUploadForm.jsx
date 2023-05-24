@@ -4,14 +4,15 @@ import {
   DialogTitle,
   useMediaQuery,
   useTheme,
-} from '@mui/material'
-import { useEffect, useState } from 'react'
-import { XMarkIcon } from '@heroicons/react/24/solid'
-import { useForm } from 'react-hook-form'
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { XMarkIcon } from '@heroicons/react/24/solid';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 const BeatUploadForm = () => {
-  const [open, setOpen] = useState(false)
-  const [previewUrl, setPreviewUrl] = useState('')
+  const [open, setOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState('');
 
   const {
     register,
@@ -19,38 +20,57 @@ const BeatUploadForm = () => {
     formState: { errors },
     setValue,
     watch,
-  } = useForm()
-  const theme = useTheme()
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
+  } = useForm();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const watchBeatFile = watch('beat-file', false)
+  const watchBeatFile = watch('beat-file', false);
 
   const handleClickOpen = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
-  const onFormSubmit = (data) => {
-    console.log(data)
-  }
+  const onFormSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append('beat-file', data['beat-file'][0]);
+    formData.append('beat-name', data['beat-name']);
+    formData.append('beat-description', data['beat-description']);
+    formData.append('beat-price', data['beat-price']);
+  
+    try {
+      const response = await axios.post('http://localhost:3000/upload', formData, {
+    
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(req.file)
+      console.log(req.body)
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
 
   useEffect(() => {
-    setPreviewUrl('')
-  }, [watchBeatFile])
+    setPreviewUrl('');
+  }, [watchBeatFile]);
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0]
-    setValue('beat-file', file)
-    if (!file) return
-    const fileReader = new FileReader()
+    const file = e.target.files[0];
+    setValue('beat-file', file);
+    if (!file) return;
+    const fileReader = new FileReader();
     fileReader.onload = () => {
-      setPreviewUrl(fileReader.result)
-    }
-    fileReader.readAsDataURL(file)
-  }
+      setPreviewUrl(fileReader.result);
+    };
+    fileReader.readAsDataURL(file);
+  };
 
   return (
     <div>
@@ -152,17 +172,17 @@ const BeatUploadForm = () => {
                     accept='audio/*, .mp3, .wav'
                     onChange={handleFileChange}
                     className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-                    // {...register('beat-file', {
-                    //   required: true,
-                    //   validate: {
-                    //     fileSize: (value) => {
-                    //       return (
-                    //         value[0].size < 10000000 ||
-                    //         'File size should be less than 10MB!'
-                    //       )
-                    //     },
-                    //   },
-                    // })}
+                    {...register('beat-file', {
+                      required: true,
+                      validate: {
+                        fileSize: (value) => {
+                          return (
+                            value[0].size < 10000000 ||
+                            'File size should be less than 10MB!'
+                          )
+                        },
+                      },
+                    })}
                   />
                   {errors['beat-file'] &&
                     errors['beat-file'].type === 'fileSize' && (
@@ -197,7 +217,7 @@ const BeatUploadForm = () => {
         </DialogContent>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default BeatUploadForm
+export default BeatUploadForm;
