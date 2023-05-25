@@ -10,8 +10,28 @@ import {
 import { Button, Checkbox, Grid, Link } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Copyright from '../UI/Copyright'
+import { useForm } from 'react-hook-form'
+import { auth } from '../../firebase/firebase'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 const Login = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm()
+
+  const onFormSubmit = (data) => {
+    // console.log(data)
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        console.log(userCredential)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   return (
     <div>
       <Container component='main' maxWidth='xs'>
@@ -32,7 +52,7 @@ const Login = () => {
           </Typography>
           <Box
             component='form'
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onFormSubmit)}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -45,7 +65,19 @@ const Login = () => {
               name='email'
               autoComplete='email'
               autoFocus
+              {...register('email', {
+                required: 'Email is required',
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: 'Entered value does not match email format',
+                },
+              })}
             />
+            {errors.email && (
+              <p className='text-sm text-red-500 italic'>
+                {errors.email.message}
+              </p>
+            )}
             <TextField
               margin='normal'
               required
@@ -55,7 +87,13 @@ const Login = () => {
               type='password'
               id='password'
               autoComplete='current-password'
+              {...register('password', { required: 'Password is required' })}
             />
+            {errors.password && (
+              <p className='text-sm text-red-500 italic'>
+                {errors.password.message}
+              </p>
+            )}
             <FormControlLabel
               control={<Checkbox value='remember' color='primary' />}
               label='Remember me'

@@ -15,6 +15,7 @@ import {
 
 import MenuIcon from '@mui/icons-material/Menu'
 import { useState } from 'react'
+import { auth } from '../../firebase/firebase'
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null)
@@ -33,6 +34,11 @@ const Navbar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+
+  const handleLogout = () => {
+    handleCloseUserMenu()
+    auth.signOut()
   }
 
   return (
@@ -148,7 +154,14 @@ const Navbar = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting, ind) => (
-                  <MenuItem key={ind} onClick={handleCloseUserMenu}>
+                  <MenuItem
+                    key={ind}
+                    onClick={
+                      setting.name != 'Logout'
+                        ? handleCloseUserMenu
+                        : handleLogout
+                    }
+                  >
                     <Link href={setting.path} underline='none' color='inherit'>
                       <Typography textAlign='center'>{setting.name}</Typography>
                     </Link>
