@@ -51,8 +51,8 @@ const BeatUploadForm = () => {
           },
         }
       )
-      console.log(req.file)
-      console.log(req.body)
+      // console.log(req.file)
+      // console.log(req.body)
       console.log(response.data)
     } catch (error) {
       console.error(error)
@@ -60,19 +60,33 @@ const BeatUploadForm = () => {
   }
 
   useEffect(() => {
-    setPreviewUrl('')
-  }, [watchBeatFile])
+    // setPreviewUrl('')
+    // setValue('beat-file', '')
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0]
-    setValue('beat-file', file)
-    if (!file) return
+    if (!watchBeatFile) {
+      setPreviewUrl('')
+      return
+    }
+
     const fileReader = new FileReader()
     fileReader.onload = () => {
       setPreviewUrl(fileReader.result)
     }
-    fileReader.readAsDataURL(file)
-  }
+    fileReader.readAsDataURL(watchBeatFile[0])
+
+    console.log(watchBeatFile[0])
+  }, [watchBeatFile])
+
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0]
+  //   setValue('beat-file', file)
+  //   if (!file) return
+  //   const fileReader = new FileReader()
+  //   fileReader.onload = () => {
+  //     setPreviewUrl(fileReader.result)
+  //   }
+  //   fileReader.readAsDataURL(file)
+  // }
 
   return (
     <div>
@@ -172,7 +186,7 @@ const BeatUploadForm = () => {
                     autoComplete='beat-file'
                     required
                     accept='audio/*, .mp3, .wav'
-                    onChange={handleFileChange}
+                    // onChange={handleFileChange}
                     className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                     {...register('beat-file', {
                       required: true,
