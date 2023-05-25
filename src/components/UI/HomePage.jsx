@@ -1,12 +1,9 @@
-import BeatUploadForm from './BeatUploadForm'
-import Footer from './Footer'
 import Hero from './Hero'
 
 const HomePage = () => {
   return (
-    <div >
-       <Hero/>
-      <BeatUploadForm />
+    <div>
+      <Hero />
     </div>
   )
 }
