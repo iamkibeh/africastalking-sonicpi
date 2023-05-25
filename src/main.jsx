@@ -5,6 +5,8 @@ import './index.css'
 import { StyledEngineProvider, ThemeProvider, createTheme } from '@mui/material'
 import { BrowserRouter } from 'react-router-dom'
 import { purple } from '@mui/material/colors'
+import { Provider } from 'react-redux'
+import { store } from './redux/store.js'
 
 const rootElement = document.getElementById('root')
 const root = ReactDOM.createRoot(rootElement)
@@ -58,9 +60,11 @@ const theme = createTheme({
 root.render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
     </ThemeProvider>
   </StyledEngineProvider>
 )
